@@ -5,3 +5,9 @@
 		{{ cliente.nome }}
 	</li>
 </ul>
+Novo Cliente:
+<input #novoCliente />
+<button (click)="addCliente(novoCliente.value); novoCliente.value=''">
+	Add Cliente
+</button>
+<div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>

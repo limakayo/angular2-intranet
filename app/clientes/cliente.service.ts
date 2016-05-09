@@ -7,15 +7,14 @@ import { Observable }		from 'rxjs/Observable';
 
 @Injectable()
 export class ClienteService {
-	
-	constructor(private http: Http) {}
+	private clientesUrl = 'http://localhost:8000/cliente';
 
-	private clientesUrl = 'app/clientes.json';
+	constructor(private _http: Http) {}
 
-	getClientes() : Observable<Cliente[]> {
-		return this.http.get(this.clientesUrl)
-						.map(this.extractData)
-						.catch(this.handleError);
+	getClientes() {
+		return this._http.get(this.clientesUrl)
+						 .map(this.extractData)
+						 .catch(this.handleError);
 	}
 
 	private extractData(res: Response) {
@@ -23,7 +22,17 @@ export class ClienteService {
 			throw new Error('Bad response status: ' + res.status);
 		}
 		let body = res.json();
-		return body.data || {};
+		return body || {};
+	}
+
+	addCliente (nome: string) {
+		let body = JSON.stringify({ nome });
+		let headers = new Headers({ 'Content-Type': 'application/json' });
+		let options = new RequestOptions({ headers: headers });
+
+		return this._http.post(this.clientesUrl, body, options)
+						.map(this.extractData)
+						.catch(this.handleError);
 	}
 
 	private handleError(error:any) {

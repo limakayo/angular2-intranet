@@ -1,16 +1,11 @@
-import {Component} from '@angular/core';
-import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from '@angular/router-deprecated';
-import {Router} from '@angular/router-deprecated';
-import {ClientesComponent} from './clientes/clientes.component';
-import {ClienteService} from './clientes/cliente.service';
-import {HTTP_PROVIDERS} from '@angular/http';
+import { Component } from '@angular/core';
 
-import { provide } from '@angular/core';
-import { XHRBackend } from '@angular/http';
+import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
+import { Router } from '@angular/router-deprecated';
 
-// in-memory web api imports
-import { InMemoryBackendService, SEED_DATA } from 'angular2-in-memory-web-api/core';
-import { ClienteData } from './clientes/cliente-data';
+import { ClientesComponent } from './clientes/clientes.component';
+
+import { HTTP_PROVIDERS } from '@angular/http';
 
 @Component({
     selector: 'my-app',
@@ -25,10 +20,6 @@ import { ClienteData } from './clientes/cliente-data';
     providers: [
     	HTTP_PROVIDERS,
     	ROUTER_PROVIDERS,
-    	ClienteService,
-    	// in memory web api providers
-    	provide(XHRBackend, {useClass: InMemoryBackendService}),
-    	provide(SEED_DATA, {useClass: ClienteData})
     ]
 })
 
