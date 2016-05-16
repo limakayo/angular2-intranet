@@ -1,7 +1,13 @@
 export class Cliente {
 
+	id:number;
+	nome: string;
+
 	constructor(
 		id: number,
-		nome: string) {}
+		nome: string) {
+			this.id = id;
+			this.nome = nome;
+		}
 
 }

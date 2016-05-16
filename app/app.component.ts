@@ -4,6 +4,7 @@ import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/route
 import { Router } from '@angular/router-deprecated';
 
 import { ClientesComponent } from './clientes/clientes.component';
+import { ClienteDetailComponent } from './clientes/cliente-detail.component'
 
 import { HTTP_PROVIDERS } from '@angular/http';
 
@@ -28,9 +29,14 @@ import { HTTP_PROVIDERS } from '@angular/http';
 		path: '/clientes',
 		name: 'Clientes',
 		component: ClientesComponent
-	}
+	},
+  {
+    path: '/cliente/:id',
+    name: 'ClienteDetail',
+    component: ClienteDetailComponent
+  }
 ])
 
-export class AppComponent { 
+export class AppComponent {
 	title = 'Intranet';
 }

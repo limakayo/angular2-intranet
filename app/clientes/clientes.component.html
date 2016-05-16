@@ -1,10 +1,14 @@
 <h3>Clientes</h3>
-<ul class="clientes">	
-	<li *ngFor="let cliente of clientes">	
+<ul class="clientes">
+	<li *ngFor="let cliente of clientes" (click)="onSelect(cliente)">
 		<span class="badge">{{ cliente.id }}</span>
 		{{ cliente.nome }}
 	</li>
 </ul>
+<div *ngIf="selectedCliente">
+	<h2>{{ selectedCliente.nome | uppercase }}</h2>
+	<button (click)="goToDetail()">Detalhes</button>
+</div>
 Novo Cliente:
 <input #novoCliente />
 <button (click)="addCliente(novoCliente.value); novoCliente.value=''">
