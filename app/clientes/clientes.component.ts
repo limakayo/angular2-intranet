@@ -1,55 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { Cliente } from './cliente';
-import { ClienteService } from './cliente.service';
+//routing
+import { Component } from '@angular/core';
+import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
-import { Router } from '@angular/router-deprecated';
-
-import { Observer } from 'rxjs/Observer';
+import { ClienteDetailComponent } from './cliente-detail/cliente-detail.component';
+import { ClienteListComponent } from './cliente-list/cliente-list.component';
 
 @Component({
-	selector: 'clientes',
-	templateUrl: 'app/clientes/clientes.component.html',
-	providers: [
-		ClienteService,
-	]
+  moduleId: module.id,
+  selector: 'intranet-clientes',
+  template: `
+    <h2>Clientes</h2>
+    <router-outlet></router-outlet>
+  `,
+  directives: [ROUTER_DIRECTIVES]
 })
-export class ClientesComponent implements OnInit {
 
-	clientes: Cliente[];
-	selectedCliente: Cliente = null;
-	errorMessage: string;
-
-	constructor(
-		private _clienteService: ClienteService,
-		private _router: Router) { }
-
-	ngOnInit() {
-		this.getClientes();
-	}
-
-	goToDetail() {
-		this._router.navigate(['ClienteDetail', { id: this.selectedCliente.id }]);
-	}
-
-	getClientes() {
-		this._clienteService.getClientes()
-			.subscribe(
-				data => this.clientes = data.clientes,
-				error => this.errorMessage = <any>error
-			);
-	}
-
-	addCliente (nome: string) {
-		if (!nome) { return; }
-		this._clienteService.addCliente(nome)
-			.subscribe(
-				data => this.clientes = [...this.clientes, data[0]],
-				error => this.errorMessage = <any>error
-			);
-	}
-
-	onSelect(cliente: Cliente) {
-		this.selectedCliente = cliente;
-	}
-
-}
+@RouteConfig([
+  {
+    path: '/',
+    name: 'ClienteList',
+    component: ClienteListComponent,
+    useAsDefault: true
+  },
+  {
+    path: '/detail/:id',
+    name: 'ClienteDetail',
+    component: ClienteDetailComponent
+  }
+])
+export class ClientesComponent {}
