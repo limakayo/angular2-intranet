@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouteParams } from '@angular/router-deprecated';
+import { OnActivate, Router, RouteSegment } from '@angular/router';
+import { DialogService } from '../../shared/dialog.service';
 
 import { Cliente } from '../shared/cliente.model';
 import { ClienteService } from '../shared/cliente.service';
@@ -8,31 +9,51 @@ import { ClienteService } from '../shared/cliente.service';
   selector: 'intranet-cliente',
   moduleId: module.id,
   templateUrl: 'cliente-detail.component.html',
-  providers: [ClienteService]
+  providers: [ClienteService, DialogService]
 })
-export class ClienteDetailComponent {
+export class ClienteDetailComponent implements OnActivate {
   cliente: Cliente;
+  editNome: string;
+  private curSegment: RouteSegment;
+
   errorMessage: string;
   successMessage: string;
 
   constructor (
     private clienteService: ClienteService,
-    private routeParams: RouteParams
+    private router: Router,
+    private dialog: DialogService
   ) {}
 
-  ngOnInit() {
-    let id = this.routeParams.get('id');
+  routerOnActivate(curr: RouteSegment) {
+    this.curSegment = curr;
+    let id = curr.getParam('id');
     this.getCliente(id);
+  }
+
+  routerCanDeactivate(): any {
+    if (!this.cliente || this.cliente.nome === this.editNome) {
+      return true;
+    }
+    return this.dialog.confirm('Discard changes?');
   }
 
   getCliente(id: string) {
     this.clienteService.getCliente(id).subscribe(
-      cliente => this.cliente = cliente,
+      cliente => {
+        if (cliente) {
+          this.editNome = cliente.nome
+          this.cliente = cliente
+        } else {
+          this.goToClientes();
+        }
+      },
       error => this.errorMessage = <any>error
     );
   }
 
   save() {
+    this.cliente.nome = this.editNome;
     this.clienteService.save(this.cliente).subscribe(
       data => {
         if (data.cliente) {
@@ -46,7 +67,8 @@ export class ClienteDetailComponent {
     )
   }
 
-  goBack() {
-    window.history.back();
+  goToClientes() {
+    let clienteId = this.cliente ? this.cliente._id : null;
+    this.router.navigate(['/clientes']);
   }
 }

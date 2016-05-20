@@ -1,6 +1,6 @@
 //routing
-import { Component } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
+import { Component, OnInit } from '@angular/core';
+import { Routes, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router';
 
 import { ClienteDetailComponent } from './cliente-detail/cliente-detail.component';
 import { ClienteListComponent } from './cliente-list/cliente-list.component';
@@ -14,18 +14,8 @@ import { ClienteListComponent } from './cliente-list/cliente-list.component';
   `,
   directives: [ROUTER_DIRECTIVES]
 })
-
-@RouteConfig([
-  {
-    path: '/',
-    name: 'ClienteList',
-    component: ClienteListComponent,
-    useAsDefault: true
-  },
-  {
-    path: '/detail/:id',
-    name: 'ClienteDetail',
-    component: ClienteDetailComponent
-  }
+@Routes([
+  { path: '', component: ClienteListComponent },
+  { path: '/:id', component: ClienteDetailComponent }
 ])
 export class ClientesComponent {}

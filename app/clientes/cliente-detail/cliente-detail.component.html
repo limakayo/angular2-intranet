@@ -1,11 +1,11 @@
 <div *ngIf="cliente">
-  <h2>{{ cliente.nome }} details!</h2>
+  <h2>{{ editNome }} details!</h2>
   <label>id: </label>{{ cliente._id }}
   <div>
     <label>Nome:</label>
-    <input [(ngModel)]="cliente.nome" placeholder="nome"/>
+    <input [(ngModel)]="editNome" placeholder="nome"/>
   </div>
-  <button (click)="goBack()">Voltar</button>
+  <button (click)="goToClientes()">Voltar</button>
   <button (click)="save()">Salvar</button>
 </div>
 <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>

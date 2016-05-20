@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
+import { Router } from '@angular/router';
 import { HTTP_PROVIDERS } from '@angular/http';
 
 import { Cliente } from '../shared/cliente.model';
@@ -43,7 +43,8 @@ export class ClienteListComponent implements OnInit {
 
 	goToDetail(cliente: Cliente) {
 		this.selectedCliente = cliente;
-		this.router.navigate(['ClienteDetail', { id: this.selectedCliente._id }]);
+		this.router.navigate(['/clientes', cliente._id]);
+		//this.router.navigate(['ClienteDetail', { id: this.selectedCliente._id }]);
 	}
 
 	getClientes() {
