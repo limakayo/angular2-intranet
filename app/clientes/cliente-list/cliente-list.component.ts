@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS } from '@angular/http';
 
 import { Cliente } from '../shared/cliente.model';
 import { ClienteService } from '../shared/cliente.service';
+import { SearchPipe } from '../../shared/search-pipe';
+import { SearchBox } from '../../shared/search-box';
 
 import { ClienteDetailComponent } from '../cliente-detail/cliente-detail.component';
 
@@ -13,10 +15,11 @@ import { Observer } from 'rxjs/Observer';
 	selector: 'intranet-cliente-list',
 	moduleId: module.id,
 	templateUrl: 'cliente-list.component.html',
+	pipes: [SearchPipe],
 	providers: [
 		ClienteService, HTTP_PROVIDERS
 	],
-	directives: [ClienteDetailComponent]
+	directives: [ClienteDetailComponent, SearchBox]
 })
 export class ClienteListComponent implements OnInit {
 
@@ -24,6 +27,7 @@ export class ClienteListComponent implements OnInit {
 	selectedCliente: Cliente = null;
 	errorMessage: string;
 	successMessage: string;
+	term: string;
 
 	constructor(
 		private clienteService: ClienteService,
@@ -33,7 +37,12 @@ export class ClienteListComponent implements OnInit {
 		this.getClientes();
 	}
 
-	goToDetail() {
+	myValueChange(event: any) {
+		this.term = event;
+	}
+
+	goToDetail(cliente: Cliente) {
+		this.selectedCliente = cliente;
 		this.router.navigate(['ClienteDetail', { id: this.selectedCliente._id }]);
 	}
 
@@ -76,10 +85,6 @@ export class ClienteListComponent implements OnInit {
 			},
 			error => this.errorMessage = <any>error
 		);
-	}
-
-	onSelect(cliente: Cliente) {
-		this.selectedCliente = cliente;
 	}
 
 }

@@ -1,16 +1,13 @@
+<search-box (searchChange)="myValueChange($event)"></search-box>
+
 <ul class="clientes">
-	<li *ngFor="let cliente of clientes" (click)="onSelect(cliente)" [class.selected]="cliente === selectedCliente">
+	<li *ngFor="let cliente of clientes | search : term" (click)="goToDetail(cliente)" [class.selected]="cliente === selectedCliente">
 		<span class="cliente-element">
 			{{ cliente.nome }}
 		</span>
 		<button class="delete-button" (click)="delete(cliente, $event)">Delete</button>
 	</li>
 </ul>
-
-<div *ngIf="selectedCliente">
-	<h2>{{ selectedCliente.nome | uppercase }}</h2>
-	<button (click)="goToDetail()">Detalhes</button>
-</div>
 
 Novo Cliente:
 <input #novoCliente />

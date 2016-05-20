@@ -1,6 +1,6 @@
 <div *ngIf="cliente">
   <h2>{{ cliente.nome }} details!</h2>
-  <label>id: </label>{{ cliente.id }}
+  <label>id: </label>{{ cliente._id }}
   <div>
     <label>Nome:</label>
     <input [(ngModel)]="cliente.nome" placeholder="nome"/>
