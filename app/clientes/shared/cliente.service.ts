@@ -2,6 +2,8 @@ import { Injectable } 		from '@angular/core';
 import { Http, Response } 	from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 
+import { AuthHttp } from 'angular2-jwt';
+
 import { Cliente } 			from './cliente.model';
 import { Observable }		from 'rxjs/Observable';
 
@@ -9,10 +11,14 @@ import { Observable }		from 'rxjs/Observable';
 export class ClienteService {
 	private clientesUrl = 'http://localhost:8000/api/clientes';
 
-	constructor(private http: Http) {}
+	constructor(private http: Http, private authHttp: AuthHttp) {}
+
+	save(cliente: Cliente) {
+		return this.put(cliente);
+	}
 
 	getClientes() {
-		return this.http.get(this.clientesUrl)
+		return this.authHttp.get(this.clientesUrl)
 						 .map(this.extractData)
 						 .catch(this.handleError);
 	}
@@ -22,17 +28,13 @@ export class ClienteService {
 		let headers = new Headers({ 'Content-Type': 'application/json' });
 		let options = new RequestOptions({ headers: headers });
 
-		return this.http.post(this.clientesUrl, body, options)
+		return this.authHttp.post(this.clientesUrl, body, options)
 						.map(this.extractData)
 						.catch(this.handleError);
 	}
 
-	save(cliente: Cliente) {
-		return this.put(cliente);
-	}
-
 	getCliente (id: string): Observable<Cliente> {
-		return this.http.get(this.clientesUrl + '/' + id)
+		return this.authHttp.get(this.clientesUrl + '/' + id)
 						 .map(this.extractData)
 						 .catch(this.handleError);
 	}
@@ -41,18 +43,18 @@ export class ClienteService {
 		let headers = new Headers({ 'Content-Type': 'application/json' })
 		let url = `${this.clientesUrl}/${cliente._id}`;
 
-		return this.http.delete(url, headers)
+		return this.authHttp.delete(url, headers)
 						.map(this.extractData)
 						.catch(this.handleError);
 	}
 
-	private put(cliente: Cliente) {
+	put(cliente: Cliente) {
 		let url = `${this.clientesUrl}/${cliente._id}`;
 		let body = JSON.stringify({ cliente });
 		let headers = new Headers({ 'Content-Type': 'application/json' });
 		let options = new RequestOptions({ headers: headers });
 
-		return this.http.put(url, body, options)
+		return this.authHttp.put(url, body, options)
 						.map(this.extractData)
 						.catch(this.handleError);
 	}
@@ -66,6 +68,7 @@ export class ClienteService {
 	}
 
 	private handleError(error:any) {
+		console.log(error.message);
 		let errMsg = error.message || 'Server error';
 		console.error(errMsg);
 		return Observable.throw(errMsg);

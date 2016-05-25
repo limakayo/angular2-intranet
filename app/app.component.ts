@@ -1,29 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { Routes, Router, ROUTER_DIRECTIVES } from '@angular/router';
+//import { Routes, Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
+import { AuthService } from './shared/auth.service';
+
+import { HomeComponent } from './home/home.component';
 import { ClientesComponent } from './clientes/clientes.component';
+import { AdminComponent } from './admin/admin.component';
 
 @Component({
     selector: 'my-app',
     moduleId: module.id,
-    template: `
-      <h1>Intranet</h1>
-      <nav>
-        <a [routerLink]="['/clientes']">Clientes</a>
-      </nav>
-      <router-outlet></router-outlet>
-    `,
+    templateUrl: 'app.component.html',
     directives: [ ROUTER_DIRECTIVES ],
+    providers: [AuthService],
 })
 
-@Routes([
-  { path: '/clientes', component: ClientesComponent }
+@RouteConfig([
+  { path: '/', name: 'Home', component: HomeComponent, useAsDefault: true },
+  { path: '/clientes/...', name: 'Clientes', component: ClientesComponent },
+  { path: '/admin', name: 'Admin', component: AdminComponent }
 ])
 
 export class AppComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private auth: AuthService) {}
 
   ngOnInit() {
-    this.router.navigate(['/clientes']);
+    if (this.auth.user) {
+      //this.auth.setRole();
+      console.log(this.auth.setRole());
+    }
   }
+
 }

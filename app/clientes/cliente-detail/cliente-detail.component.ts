@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { OnActivate, Router, RouteSegment } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+//import { OnActivate, Router, RouteSegment } from '@angular/router';
+import { Router, RouteParams } from '@angular/router-deprecated';
 import { DialogService } from '../../shared/dialog.service';
 
 import { Cliente } from '../shared/cliente.model';
@@ -11,10 +12,10 @@ import { ClienteService } from '../shared/cliente.service';
   templateUrl: 'cliente-detail.component.html',
   providers: [ClienteService, DialogService]
 })
-export class ClienteDetailComponent implements OnActivate {
+export class ClienteDetailComponent /*implements OnActivate*/ implements OnInit {
   cliente: Cliente;
   editNome: string;
-  private curSegment: RouteSegment;
+  //private curSegment: RouteSegment;
 
   errorMessage: string;
   successMessage: string;
@@ -22,21 +23,27 @@ export class ClienteDetailComponent implements OnActivate {
   constructor (
     private clienteService: ClienteService,
     private router: Router,
-    private dialog: DialogService
+    private dialog: DialogService,
+    private routeParams: RouteParams
   ) {}
 
-  routerOnActivate(curr: RouteSegment) {
-    this.curSegment = curr;
-    let id = curr.getParam('id');
+  ngOnInit() {
+    let id = this.routeParams.get('id');
     this.getCliente(id);
   }
 
-  routerCanDeactivate(): any {
+  /*routerOnActivate(curr: RouteSegment) {
+    this.curSegment = curr;
+    let id = curr.getParam('id');
+    this.getCliente(id);
+  }*/
+
+  /*routerCanDeactivate(): any {
     if (!this.cliente || this.cliente.nome === this.editNome) {
       return true;
     }
     return this.dialog.confirm('Discard changes?');
-  }
+  }*/
 
   getCliente(id: string) {
     this.clienteService.getCliente(id).subscribe(
@@ -69,6 +76,7 @@ export class ClienteDetailComponent implements OnActivate {
 
   goToClientes() {
     let clienteId = this.cliente ? this.cliente._id : null;
-    this.router.navigate(['/clientes']);
+    //this.router.navigate(['/clientes']);
+    window.history.back();
   }
 }
