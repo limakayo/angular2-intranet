@@ -7,6 +7,8 @@ import { AuthService } from './shared/auth.service';
 import { HomeComponent } from './home/home.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { AdminComponent } from './admin/admin.component';
+import { OrdensComponent } from './ordens/ordens.component';
+import { tokenNotExpired } from 'angular2-jwt';
 
 @Component({
     selector: 'my-app',
@@ -19,17 +21,24 @@ import { AdminComponent } from './admin/admin.component';
 @RouteConfig([
   { path: '/', name: 'Home', component: HomeComponent, useAsDefault: true },
   { path: '/clientes/...', name: 'Clientes', component: ClientesComponent },
-  { path: '/admin', name: 'Admin', component: AdminComponent }
+  { path: '/admin', name: 'Admin', component: AdminComponent },
+  { path: '/ordens/...', name: 'Ordens', component: OrdensComponent },
 ])
 
 export class AppComponent implements OnInit {
   constructor(private auth: AuthService) {}
 
   ngOnInit() {
-    if (this.auth.user) {
-      //this.auth.setRole();
-      console.log(this.auth.setRole());
-    }
+    if (tokenNotExpired()) this.getUser();
+  }
+
+  getUser() {
+    this.auth.getUser().subscribe(
+      data => {
+        if (data.app_metadata.roles[0] == "admin")
+            this.auth.userIsAdmin = true
+        }
+    );
   }
 
 }

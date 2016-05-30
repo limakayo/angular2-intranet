@@ -14,6 +14,7 @@
       <ul class="nav navbar-nav">
         <li><a [routerLink]="['Clientes']" *ngIf="auth.loggedIn()">Clientes</a></li>
         <li><a [routerLink]="['Admin']" *ngIf="auth.loggedIn() && auth.isAdmin()">Admin</a></li>
+        <li><a [routerLink]="['Ordens']" *ngIf="auth.loggedIn()">Ordens</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <button (click)="auth.login()" *ngIf="!auth.loggedIn()" class="btn btn-default navbar-btn">Login</button>

@@ -37,30 +37,22 @@ export class AuthService {
   }
 
   public getUser() {
-    let email = this.user['email'];
-    return this.authHttp.get(this.usersUrl + '/' + email)
-            .map(this.extractData)
-            .catch(this.handleError);
-  }
-
-  public setRole() {
-    this.getUser().subscribe(
-      data => console.log("Role: " + data.role)
-    )
+    return this.authHttp.get(this.usersUrl)
+      .map(this.extractData)
+      .catch(this.handleError);
   }
 
   public isAdmin() {
-    if (this.user) {
-      return this.user['roles'][0];
-    } else {
-      return null;
-    }
+    if (this.userIsAdmin)
+      return true;
+
+    return false;
   }
 
   public login() {
     this.lock.show({
       authParams: {
-        scope: 'openid app_metadata'
+        scope: 'openid app_metadata email name'
       }
     }, (err: string, profile: Object, token: string) => {
       if (err) {
@@ -75,8 +67,7 @@ export class AuthService {
 
       this.addUser(this.user).subscribe(
         data => {
-          this.userRole = data.user.role;
-          if (this.userRole === 'admin')
+          if (data == 'admin')
             this.userIsAdmin = true
           else
             this.userIsAdmin = false
@@ -97,11 +88,7 @@ export class AuthService {
   public loggedIn() {
     return tokenNotExpired();
   }
-
-  /*public getUserRole() {
-    console.log(this.userRole);
-  }*/
-
+  
   private extractData(res: Response) {
 		if (res.status < 200 || res.status >= 300) {
 			throw new Error('Bad response status: ' + res.status);

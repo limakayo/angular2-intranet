@@ -1,0 +1,9 @@
+<h3>Entrada</h3>
+
+<form #ordemForm="ngForm" (ngSubmit)="onSubmit(ordemForm.value)">
+	<div class="form-group">
+		<label for="numero">Numero</label>
+		<input type="text" class="form-control" ngControl="numero">
+	</div>
+	<button type="submit" class="btn btn-default">Cadastrar</button>
+</form>
