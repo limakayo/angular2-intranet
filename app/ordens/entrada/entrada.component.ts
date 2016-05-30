@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdemService } from '../shared/ordem.service';
 import { Ordem } from '../shared/ordem.model';
-      
+
 @Component({
 	moduleId: module.id,
 	selector: 'entrada',
@@ -14,15 +14,15 @@ export class EntradaComponent {
 
 	model = new Ordem(12, 12);
 
-	onSubmit(form: any) {
+	constructor(private ordemService: OrdemService) { }
+
+  onSubmit(form: any) {
+    this.ordemService.addOrdem(form).subscribe(
+      data => console.log(data)
+    );
 		this.submitted = true;
 		console.log("submitted: ",form);
 	}
 
-	getDiagnostic() {
-		return JSON.stringify(this.model);
-	} 
-
-	constructor(private ordemService: OrdemService) { }
 
 }

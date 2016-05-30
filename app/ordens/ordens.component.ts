@@ -10,7 +10,7 @@ import { ControleComponent } from './controle/controle.component';
 @Component({
 	moduleId: module.id,
 	selector: 'ordens',
-	templateUrl: 'ordens.component.html',
+	template: '<router-outlet></router-outlet>',
 	directives: [ ROUTER_DIRECTIVES ]
 })
 
@@ -27,5 +27,5 @@ export class OrdensComponent implements OnInit {
 
 	ngOnInit() { }
 
-	
+
 }
