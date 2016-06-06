@@ -11,10 +11,10 @@
     </div>
 
     <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li><a [routerLink]="['Clientes']" *ngIf="auth.loggedIn()">Clientes</a></li>
-        <li><a [routerLink]="['Admin']" *ngIf="auth.loggedIn() && auth.isAdmin()">Admin</a></li>
-        <li class="dropdown">
+      <ul class="nav navbar-nav" *ngIf="auth.loggedIn()">
+        <li *ngIf="auth.isAdmin()"><a [routerLink]="['Clientes']">Clientes</a></li>
+        <li *ngIf="auth.isAdmin()"><a [routerLink]="['Admin']">Admin</a></li>
+        <li class="dropdown" *ngIf="auth.isAdmin()">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             Ordens <b class="caret"></b>
           </a>

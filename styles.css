@@ -44,6 +44,21 @@ body {
     left: -6px;
 }
 
+/* PRIME NG */
+
+.ui-inputtext {
+  padding: 6px 12px;
+}
+
+.ui-autocomplete {
+  width: 100% !important;
+}
+
+/* ENTRADA */
+.entrada-numero-os {
+  text-align: right;
+}
+
 
 /* everywhere else */
 * {

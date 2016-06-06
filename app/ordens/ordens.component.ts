@@ -19,7 +19,8 @@ import { ControleComponent } from './controle/controle.component';
 	{ path: '/saida', name: 'Saida', component: SaidaComponent },
 	{ path: '/fechadas', name: 'Fechadas', component: FechadasComponent },
 	{ path: '/abertas', name: 'Abertas', component: AbertasComponent },
-	{ path: '/controle', name: 'Controle', component: ControleComponent }
+	{ path: '/controle', name: 'Controle', component: ControleComponent },
+	{ path: '/controle/:id', name: 'ControleDetail', component: ControleComponent }
 ])
 
 export class OrdensComponent implements OnInit {

@@ -1,0 +1,55 @@
+<!--<form>
+<input class="form-control" [ngModel]="valor" ngControl="valor" myMask />
+</form>-->
+
+<form>
+<my-mask [(ngModel)]="valor"></my-mask>
+</form>
+
+<div class="row">
+  <div class="col-md-12">
+    <h3>Controle</h3>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-2">
+    <label for="ordem">NºOS:</label>
+    <input #input [(ngModel)]="numero" placeholder="Ordem" class="form-control" id="ordem" (keyup.enter)='getOrdem(input.value)'>
+  </div>
+</div>
+<hr>
+{{ errorMessage }}
+<form #ordemForm="ngForm" (ngSubmit)="editOrdem(ordemForm.value)">
+  <div class="row" *ngIf="ordem">
+    <input type="hidden" [ngModel]="ordem._id" ngControl="_id">
+    <div class="col-md-3">
+      <h4>Equipamento:</h4>
+      <span>{{ ordem.equipamento.nome }}</span>
+    </div>
+    <div class="col-md-3">
+      <h4>Andamento</h4>
+      Entrada: {{ stringAsDate(ordem.createdAt) | date:'dd/MM/yy HH:mm:ss' }}
+    </div>
+    <div class="col-md-3">
+      <h4>Orçamento</h4>
+      <div class="form-group">
+        <label for="defeito">Defeito:</label>
+        <textarea ngControl="defeito" class="form-control" [ngModel]="ordem.defeito"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="defeito">Solução:</label>
+        <textarea ngControl="solucao" class="form-control" [ngModel]="ordem.solucao"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="defeito">Valor M.O:</label>
+        <input ngControl="valor_mo" class="form-control" [ngModel]="ordem.valor_mo">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <h4>Cliente:</h4>
+      <span>{{ ordem.cliente.nome }}</span>
+    </div>
+  </div>
+  <input type="hidden" class="form-control" [(ngModel)]="numero" ngControl="numero">
+  <button type="submit" class="btn btn-default">Salvar</button>
+</form>

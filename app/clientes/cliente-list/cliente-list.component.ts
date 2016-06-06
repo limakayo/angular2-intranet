@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 //import { Router } from '@angular/router';
 import { Router } from '@angular/router-deprecated';
-import { HTTP_PROVIDERS } from '@angular/http';
 
 import { Cliente } from '../shared/cliente.model';
 import { ClienteService } from '../shared/cliente.service';
@@ -18,7 +17,7 @@ import { Observer } from 'rxjs/Observer';
 	templateUrl: 'cliente-list.component.html',
 	pipes: [SearchPipe],
 	providers: [
-		ClienteService, HTTP_PROVIDERS
+		ClienteService
 	],
 	directives: [ClienteDetailComponent, SearchBox]
 })
@@ -52,7 +51,7 @@ export class ClienteListComponent implements OnInit {
 	getClientes() {
 		this.clienteService.getClientes()
 			.subscribe(
-				data => this.clientes = data.clientes,
+				clientes => this.clientes = clientes,
 				error => this.errorMessage = <any>error
 			);
 	}

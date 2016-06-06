@@ -16,8 +16,8 @@ import 'rxjs/add/operator/map';
 import {AppComponent} from './app.component';
 
 bootstrap(AppComponent, [
-	ROUTER_PROVIDERS, 
-	HTTP_PROVIDERS, 
+	ROUTER_PROVIDERS,
+	HTTP_PROVIDERS,
 	AUTH_PROVIDERS,
 ]).then((appRef) => {
 	appInjector(appRef.injector);

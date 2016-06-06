@@ -17,6 +17,12 @@ export class OrdemService {
 			.catch(this.handleError);
 	}
 
+	getOrdem(numero: string) {
+		return this.authHttp.get(this.url + '/' + numero)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
 	addOrdem(form: any) {
 		let body = JSON.stringify({ form });
 		let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -25,6 +31,24 @@ export class OrdemService {
 		return this.authHttp.post(this.url, body, options)
 						.map(this.extractData)
 						.catch(this.handleError);
+	}
+
+	editOrdem(form: any) {
+		let url = `${this.url}/${form._id}`;
+		let body = JSON.stringify({ form });
+		let headers = new Headers({ 'Content-Type': 'application/json' });
+		let options = new RequestOptions({ headers: headers });
+
+		return this.authHttp.put(url, body, options)
+						.map(this.extractData)
+						.catch(this.handleError);
+	}
+
+	getNextId() {
+		let url = this.url + '/next';
+		return this.authHttp.get(url)
+			.map(this.extractData)
+			.catch(this.handleError);
 	}
 
 	private extractData(res: Response) {
