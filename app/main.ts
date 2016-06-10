@@ -5,6 +5,7 @@ import { HTTP_PROVIDERS } from '@angular/http';
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { AuthService } from './shared/auth.service';
 import { appInjector } from'./shared/injector';
+import { FORM_PROVIDERS } from '@angular/common';
 
 // Add all operators to Observable
 //import 'rxjs/Rx';
@@ -19,6 +20,7 @@ bootstrap(AppComponent, [
 	ROUTER_PROVIDERS,
 	HTTP_PROVIDERS,
 	AUTH_PROVIDERS,
+	FORM_PROVIDERS
 ]).then((appRef) => {
 	appInjector(appRef.injector);
 });

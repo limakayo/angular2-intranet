@@ -1,55 +1,83 @@
-<!--<form>
-<input class="form-control" [ngModel]="valor" ngControl="valor" myMask />
-</form>-->
-
-<form>
-<my-mask [(ngModel)]="valor"></my-mask>
-</form>
-
 <div class="row">
   <div class="col-md-12">
     <h3>Controle</h3>
   </div>
 </div>
+
 <div class="row">
   <div class="col-md-2">
     <label for="ordem">NºOS:</label>
     <input #input [(ngModel)]="numero" placeholder="Ordem" class="form-control" id="ordem" (keyup.enter)='getOrdem(input.value)'>
   </div>
 </div>
+
 <hr>
+
 {{ errorMessage }}
+
 <form #ordemForm="ngForm" (ngSubmit)="editOrdem(ordemForm.value)">
+
   <div class="row" *ngIf="ordem">
+
     <input type="hidden" [ngModel]="ordem._id" ngControl="_id">
+
     <div class="col-md-3">
       <h4>Equipamento:</h4>
-      <span>{{ ordem.equipamento.nome }}</span>
+      <p><strong>Tipo: </strong>{{ ordem.equipamento.nome }}</p>
+      <p><strong>Marca: </strong>{{ ordem.marca }}</p>
+      <p><strong>Modelo: </strong>{{ ordem.modelo }}</p>
+      <p><strong>Série: </strong>{{ ordem.serie }}</p>
+      <label>Acessórios:</label>
+      <div class="checkbox" *ngFor="let acessorio of acessorios">
+        <label>
+          <input type="checkbox" [(ngModel)]="acessorio.selected" (ngModelChange)="onCheckboxChange(acessorio)"> {{ acessorio.nome }}
+        </label>
+      </div>
     </div>
+
     <div class="col-md-3">
       <h4>Andamento</h4>
-      Entrada: {{ stringAsDate(ordem.createdAt) | date:'dd/MM/yy HH:mm:ss' }}
+      <div *ngIf="ordem.createdAt">
+        <strong>Entrada:</strong>
+        {{ stringAsDate(ordem.createdAt) | date:'dd/MM/yyyy HH:mm:ss' }}
+      </div>
+      <div *ngIf="ordem.data_hora_orcamento">
+        <strong>Orçamento:</strong>
+        {{ stringAsDate(ordem.data_hora_orcamento) | date:'dd/MM/yyyy HH:mm:ss' }}
+      </div>
     </div>
+
     <div class="col-md-3">
       <h4>Orçamento</h4>
       <div class="form-group">
         <label for="defeito">Defeito:</label>
-        <textarea ngControl="defeito" class="form-control" [ngModel]="ordem.defeito"></textarea>
+        <textarea ngControl="defeito" class="form-control" id="defeito" [ngModel]="ordem.defeito"></textarea>
       </div>
       <div class="form-group">
-        <label for="defeito">Solução:</label>
-        <textarea ngControl="solucao" class="form-control" [ngModel]="ordem.solucao"></textarea>
+        <label for="solucao">Solução:</label>
+        <textarea ngControl="solucao" class="form-control" id="solucao" [ngModel]="ordem.solucao"></textarea>
       </div>
       <div class="form-group">
-        <label for="defeito">Valor M.O:</label>
-        <input ngControl="valor_mo" class="form-control" [ngModel]="ordem.valor_mo">
+        <label for="valor_mo">Valor M.O:</label>
+        <my-mask ngControl="valor_mo" id="valor_mo" [(ngModel)]="ordem.valor_mo"></my-mask>
+      </div>
+      <div class="form-group">
+        <label for="valor_pecas">Valor Peças:</label>
+        <my-mask ngControl="valor_pecas" id="valor_pecas" [(ngModel)]="ordem.valor_pecas"></my-mask>
+      </div>
+      <div class="form-group">
+        <label for="valor_total">Valor Total:</label>
+        <my-mask ngControl="valor_total" id="valor_total" [(ngModel)]="ordem.valor_total"></my-mask>
       </div>
     </div>
+
     <div class="col-md-3">
       <h4>Cliente:</h4>
-      <span>{{ ordem.cliente.nome }}</span>
+      <span><strong>Nome:</strong> {{ ordem.cliente.nome }}</span>
     </div>
+
   </div>
+
   <input type="hidden" class="form-control" [(ngModel)]="numero" ngControl="numero">
   <button type="submit" class="btn btn-default">Salvar</button>
 </form>

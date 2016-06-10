@@ -4,6 +4,7 @@ import { Router } from '@angular/router-deprecated';
 import { OrdemService } from '../shared/ordem.service';
 import { ClienteService } from '../../clientes/shared/cliente.service';
 import { EquipamentoService } from '../../equipamentos/shared/equipamento.service';
+import { AcessorioService } from '../../shared/acessorio.service';
 
 import { Ordem } from '../shared/ordem.model';
 
@@ -13,10 +14,20 @@ import { AutoComplete } from 'primeng/primeng';
 	moduleId: module.id,
 	selector: 'entrada',
 	templateUrl: 'entrada.component.html',
-	providers: [ OrdemService, ClienteService, EquipamentoService ],
+	providers: [ 
+		OrdemService, 
+		ClienteService, 
+		EquipamentoService, 
+		AcessorioService 
+	],
 	directives: [ AutoComplete ]
 })
 export class EntradaComponent implements OnInit {
+
+	acessorios: any[];
+
+	acessoriosSelecionados: any[] = [];
+
 
 	cliente: any;
 	equipamentos: any[];
@@ -28,13 +39,31 @@ export class EntradaComponent implements OnInit {
 	clientes: any[];
 	filteredClientes: any[];
 
-  constructor(
+  	constructor(
 		private router: Router,
 		private ordemService: OrdemService,
 		private clienteService: ClienteService,
-	  private equipamentoService: EquipamentoService){}
+	  	private equipamentoService: EquipamentoService,
+	  	private acessorioService: AcessorioService){}
+
+  	onSelect(acessorio: any) {
+  	}
+
+    onCheckboxChange(acessorio:any) {
+		if (acessorio.selected == true) {
+			this.acessoriosSelecionados.push(acessorio);
+		} else {
+			let i = this.acessoriosSelecionados.indexOf(acessorio);
+			if (i != -1) {
+				this.acessoriosSelecionados.splice(i, 1);
+			}
+		}
+    }
 
 	ngOnInit() {
+		this.acessorioService.getAcessorios().subscribe(
+			acessorios => this.acessorios = acessorios
+		);
 		this.getEquipamentos();
 		this.ordemService.getNextId().subscribe(
 			numero => this.numero = numero
@@ -66,10 +95,11 @@ export class EntradaComponent implements OnInit {
 		return filtered;
 	}
 
-  add(form: any) {
+  	add(form: any) {
 		if (typeof form.cliente !== 'object')
 			return console.log('Não é um cliente');
 		else {
+		form.acessorios = this.acessoriosSelecionados;
 	    this.ordemService.addOrdem(form).subscribe(
 	      data => {
 					console.log(data)
