@@ -4,7 +4,9 @@ import { Router } from '@angular/router-deprecated';
 import { OrdemService } from '../shared/ordem.service';
 import { ClienteService } from '../../clientes/shared/cliente.service';
 import { EquipamentoService } from '../../equipamentos/shared/equipamento.service';
-import { AcessorioService } from '../../shared/acessorio.service';
+import { AcessorioService } from '../../acessorios/acessorio.service';
+import { AtendimentoService } from '../../atendimentos/atendimento.service';
+import { TransporteService } from '../../transportes/transporte.service';
 
 import { Ordem } from '../shared/ordem.model';
 
@@ -18,16 +20,24 @@ import { AutoComplete } from 'primeng/primeng';
 		OrdemService, 
 		ClienteService, 
 		EquipamentoService, 
-		AcessorioService 
+		AcessorioService,
+		AtendimentoService,
+		TransporteService
 	],
 	directives: [ AutoComplete ]
 })
 export class EntradaComponent implements OnInit {
 
-	acessorios: any[];
+	andamentos: any[];
 
+	acessorios: any[];
 	acessoriosSelecionados: any[] = [];
 
+	atendimentos: any[];
+	atendimentoSelecionado: any;
+
+	transportes: any[];
+	transporteSelecionado: any;
 
 	cliente: any;
 	equipamentos: any[];
@@ -44,10 +54,9 @@ export class EntradaComponent implements OnInit {
 		private ordemService: OrdemService,
 		private clienteService: ClienteService,
 	  	private equipamentoService: EquipamentoService,
-	  	private acessorioService: AcessorioService){}
-
-  	onSelect(acessorio: any) {
-  	}
+	  	private acessorioService: AcessorioService,
+	  	private atendimentoService: AtendimentoService,
+	  	private transporteService: TransporteService){}
 
     onCheckboxChange(acessorio:any) {
 		if (acessorio.selected == true) {
@@ -60,10 +69,25 @@ export class EntradaComponent implements OnInit {
 		}
     }
 
+    onAtendimentoChange(atendimento:any) {
+		this.atendimentoSelecionado = atendimento;
+    }
+
+    onTransporteChange(transporte:any) {
+		this.transporteSelecionado = transporte;
+    }
+
 	ngOnInit() {
 		this.acessorioService.getAcessorios().subscribe(
 			acessorios => this.acessorios = acessorios
 		);
+		this.atendimentoService.getAtendimentos().subscribe(
+			atendimentos => this.atendimentos = atendimentos
+		);
+		this.transporteService.getTransportes().subscribe(
+			transportes => this.transportes = transportes
+		);
+
 		this.getEquipamentos();
 		this.ordemService.getNextId().subscribe(
 			numero => this.numero = numero
@@ -96,21 +120,31 @@ export class EntradaComponent implements OnInit {
 	}
 
   	add(form: any) {
+
 		if (typeof form.cliente !== 'object')
 			return console.log('Não é um cliente');
 		else {
-		form.acessorios = this.acessoriosSelecionados;
-	    this.ordemService.addOrdem(form).subscribe(
-	      data => {
-					console.log(data)
-					this.ordemCadastrada = data
-					this.numero = data.numero + 1
-					this.mensagem = "Ordem cadastrada com sucesso!"
-					setTimeout(() => {
-						this.mensagem = null
-					}, 10000);
-				}
-	    );
+
+			form.acessorios = this.acessoriosSelecionados;
+			form.atendimento = this.atendimentoSelecionado;
+			form.transporte = this.transporteSelecionado;
+			form.andamento = 'Aberta';
+			if (this.atendimentoSelecionado.nome == 'Garantia') {
+				form.andamento = 'Garantia';
+			}
+
+		    this.ordemService.addOrdem(form).subscribe(
+		      data => {
+						console.log(data)
+						this.ordemCadastrada = data
+						this.numero = data.numero + 1
+						this.mensagem = "Ordem cadastrada com sucesso!"
+						setTimeout(() => {
+							this.mensagem = null
+						}, 10000);
+					}
+		    );
+		    
 		}
 	}
 

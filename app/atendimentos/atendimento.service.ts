@@ -6,16 +6,16 @@ import { AuthHttp } from 'angular2-jwt';
 import { Observable }		from 'rxjs/Observable';
 
 @Injectable()
-export class AcessorioService {
-  private url = 'http://localhost:8000/api/acessorios';
+export class AtendimentoService {
+  private url = 'http://localhost:8000/api/atendimentos';
 
-  constructor(private authHttp: AuthHttp) {}
+  constructor(private authHttp: AuthHttp) { }
 
-  getAcessorios() {
+  getAtendimentos() {
     return this.authHttp.get(this.url)
-          .map(this.extractData)
-          .catch(this.handleError);
-  }  
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
 
   private extractData(res: Response) {
     if (res.status < 200 || res.status >= 300) {

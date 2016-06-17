@@ -17,6 +17,36 @@ export class OrdemService {
 			.catch(this.handleError);
 	}
 
+	getAbertas() {
+		return this.authHttp.get(this.url + '/abertas')
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	getAprovadas() {
+		return this.authHttp.get(this.url + '/aprovadas')
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	getReprovadas() {
+		return this.authHttp.get(this.url + '/reprovadas')
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	getGarantias() {
+		return this.authHttp.get(this.url + '/garantias')
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	getAvaliadas() {
+		return this.authHttp.get(this.url + '/avaliadas')
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
 	getOrdem(numero: string) {
 		return this.authHttp.get(this.url + '/' + numero)
 			.map(this.extractData)
