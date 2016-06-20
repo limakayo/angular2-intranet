@@ -5,6 +5,7 @@ import { OrdemService } from '../shared/ordem.service';
 import { AcessorioService } from '../../acessorios/acessorio.service';
 import { AtendimentoService } from '../../atendimentos/atendimento.service';
 import { TransporteService } from '../../transportes/transporte.service';
+import { AuthService } from '../../shared/auth.service';
 
 import { Currency } from '../shared/currency';
 
@@ -26,6 +27,8 @@ import { FORM_DIRECTIVES } from '@angular/common';
 export class ControleComponent implements OnInit {
 
 	ordem: any;
+
+	user: any;
 
 	numero: number;
 
@@ -65,6 +68,7 @@ export class ControleComponent implements OnInit {
 		private acessorioService: AcessorioService,
 		private atendimentoService: AtendimentoService,
 		private transporteService: TransporteService,
+		private authService: AuthService,
 	    private router: Router,
 	    private routeParams: RouteParams) { }
 
@@ -72,6 +76,7 @@ export class ControleComponent implements OnInit {
 		this.getAcessorios();
 		this.getAtendimentos();
 		this.getTransportes();
+		this.getUser();
 
 		this.updateMenu();
 
@@ -79,6 +84,12 @@ export class ControleComponent implements OnInit {
 		  let numero = this.routeParams.get('id');
 		  this.getOrdem(numero);
 		}
+	}
+
+	getUser() {
+		this.authService.getUser().subscribe(
+			user => this.user = user
+		);
 	}
 
 	goToControle(numero: string) {
@@ -204,6 +215,8 @@ export class ControleComponent implements OnInit {
 		form.transporte = this.transporteSelecionado;
 		form.aprovacao = this.aprovacaoSelecionada.id;
 		form.andamento = this.andamento;
+		form.tecnico = this.user.email;
+		console.log(this.user);
 
 		this.ordemService.editOrdem(form).subscribe(
 			ordem => {

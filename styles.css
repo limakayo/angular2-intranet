@@ -48,6 +48,14 @@
   font-size: 14px;
 }
 
+.table-andamento {
+  margin-bottom: -1px;
+}
+
+.table-andamento th {
+  width: 102px;
+}
+
 /* PRIME NG */
 
 .ui-inputtext {

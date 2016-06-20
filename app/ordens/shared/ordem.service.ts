@@ -11,6 +11,24 @@ export class OrdemService {
 
 	constructor(private http: Http, private authHttp: AuthHttp) { }
 
+	getSaidasCliente(id: any) {
+		return this.authHttp.get(this.url + '/saidas/' + id)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	getFechadasCliente(id: any) {
+		return this.authHttp.get(this.url + '/fechadas/' + id)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
+	getAbertasCliente(id: any) {
+		return this.authHttp.get(this.url + '/abertas/' + id)
+			.map(this.extractData)
+			.catch(this.handleError);
+	}
+
 	getOrdens() {
 		return this.http.get(this.url)
 			.map(this.extractData)

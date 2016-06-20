@@ -1,4 +1,11 @@
-<h3>Controle</h3>
+<div class="row">
+  <div class="col-md-6">
+    <h3 style="margin-top:0">Controle</h3>
+  </div>
+  <div class="col-md-6 entrada-numero-os" *ngIf="ordem">
+    <h3 style="margin-top:0">OS: {{ ordem.numero }}</h3>
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-1">
@@ -7,7 +14,7 @@
   </div>
   
   <div class="col-md-2">
-    <label for="avaliada">Orçamentos</label>
+    <label for="avaliada">Orçamentos <span *ngIf="avaliadas">({{ avaliadas.length }})</span></label>
     <select [(ngModel)]="avaliada" class="form-control" id="avaliada" (ngModelChange)="onOrdemChange(avaliada)">
       <option *ngFor="let avaliada of avaliadas" [ngValue]="avaliada">
         {{ avaliada.numero }} | 
@@ -18,7 +25,7 @@
     </select>
   </div>
   <div class="col-md-2">
-    <label for="aberta">Abertas</label>
+    <label for="aberta">Abertas <span *ngIf="abertas">({{ abertas.length }})</span></label>
     <select [(ngModel)]="aberta" class="form-control" id="aberta" (ngModelChange)="onOrdemChange(aberta)">
       <option *ngFor="let aberta of abertas" [ngValue]="aberta">
         {{ aberta.numero }} | 
@@ -29,7 +36,7 @@
     </select>
   </div>
   <div class="col-md-2">
-    <label for="aprovada">Aprovadas</label>
+    <label for="aprovada">Aprovadas <span *ngIf="aprovadas">({{ aprovadas.length }})</span></label>
     <select [(ngModel)]="aprovada" class="form-control" id="aprovada" (ngModelChange)="onOrdemChange(aprovada)">
       <option *ngFor="let aprovada of aprovadas" [ngValue]="aprovada">
         {{ aprovada.numero }} | 
@@ -40,7 +47,7 @@
     </select>
   </div>
   <div class="col-md-2">
-    <label for="reprovada">Reprovadas</label>
+    <label for="reprovada">Reprovadas <span *ngIf="reprovadas">({{ reprovadas.length }})</span></label>
     <select [(ngModel)]="reprovada" class="form-control" id="reprovada" (ngModelChange)="onOrdemChange(reprovada)">
       <option *ngFor="let reprovada of reprovadas" [ngValue]="reprovada">
         {{ reprovada.numero }} | 
@@ -51,7 +58,7 @@
     </select>
   </div>
   <div class="col-md-2">
-    <label for="garantia">Garantias</label>
+    <label for="garantia">Garantias <span *ngIf="garantias">({{ garantias.length }})</span></label>
     <select [(ngModel)]="garantia" class="form-control" id="garantia" (ngModelChange)="onOrdemChange(garantia)">
       <option *ngFor="let garantia of garantias" [ngValue]="garantia">
         {{ garantia.numero }} | 
@@ -62,12 +69,12 @@
     </select>
   </div>
   <div class="col-md-1">
-    <label for="aberta">Série</label>
-    <input type="text" class="form-control">
+    <label for="serie">Série</label>
+    <input type="text" class="form-control" id="serie">
   </div>
 </div>
 
-<hr>
+<hr style="margin-bottom:5px">
 
 {{ errorMessage }} 
 
@@ -126,36 +133,40 @@
         <span>{{ ordem.andamento }}</span>
       </div>
 
-      <table class="table table-bordered" *ngIf="ordem.createdAt">
+      <table class="table table-bordered table-andamento" *ngIf="ordem.createdAt">
         <tr>
-        <th>Entrada</th>
+        <th>Aberta</th>
         <td>{{ stringAsDate(ordem.createdAt) | date:'dd/MM/yyyy HH:mm:ss' }}</td>
         </tr>
       </table>
 
-      <table class="table table-bordered" *ngIf="ordem.data_hora_orcamento">
+      <table class="table table-bordered table-andamento" *ngIf="ordem.data_hora_orcamento">
         <tr>
         <th>Orçamento</th>
         <td>{{ stringAsDate(ordem.data_hora_orcamento) | date:'dd/MM/yyyy HH:mm:ss' }}</td>
         </tr>
       </table>
 
-      <div class="form-group" *ngIf="ordem.data_hora_orcamento && ordem.andamento != 'Garantia'">
-        <p *ngIf="!ordem.data_hora_aprovacao"><strong>Aprovação:</strong></p>
-        <table class="table table-bordered" *ngIf="ordem.data_hora_aprovacao">
+      <div *ngIf="ordem.data_hora_orcamento && ordem.atendimento.nome != 'Garantia'">
+        <table class="table table-bordered table-andamento" *ngIf="ordem.data_hora_aprovacao">
           <tr>
           <th>{{ getAprovacao() }}</th>
           <td>{{ stringAsDate(ordem.data_hora_aprovacao) | date:'dd/MM/yyyy HH:mm:ss' }}</td>
           </tr>
         </table>
-        <div *ngIf="!fechado">
-          <label class="radio-inline no_indent" *ngFor="let aprovacao of aprovacoes">
-            <input type="radio" name="aprovacao" [ngModel]="{checked: aprovacao.id == aprovacaoSelecionada.id }" (change)="onAprovacaoChange(aprovacao)"> {{ aprovacao.nome }}
-          </label>
+
+        <div class="form-group" *ngIf="!fechado">
+          <label style="margin-top:15px">Aprovação:</label>
+          <div class="checkbox" *ngFor="let aprovacao of aprovacoes">
+            <label style="padding-left:0">
+              <input type="radio" name="aprovacao" [ngModel]="{checked: aprovacao.id == aprovacaoSelecionada.id }" (change)="onAprovacaoChange(aprovacao)"> {{ aprovacao.nome }}
+            </label>
+          </div>
         </div>
+
       </div>
 
-      <table class="table table-bordered" *ngIf="ordem.data_hora_pronto">
+      <table class="table table-bordered table-andamento" *ngIf="ordem.data_hora_pronto">
         <tr>
           <th>Pronto</th>
           <td>{{ stringAsDate(ordem.data_hora_pronto) | date:'dd/MM/yyyy HH:mm:ss' }}</td>
@@ -169,22 +180,26 @@
         </label>
       </div>
 
-      <table class="table table-bordered" *ngIf="ordem.data_hora_fechado">
-        <tr>
-          <th>Fechado</th>
-          <td>{{ stringAsDate(ordem.data_hora_fechado) | date:'dd/MM/yyyy HH:mm:ss' }}</td> 
-          <td><input type="checkbox" [(ngModel)]="fechado" (ngModelChange)="onFechadoChange(fechado)"></td>
-        </tr>
-      </table>
+      <div *ngIf="aprovacaoSelecionada && aprovacaoSelecionada.nome != 'Aguardando'">
 
-      <div class="checkbox" *ngIf="!ordem.data_hora_fechado">
-        <label>
-          <input type="checkbox" [(ngModel)]="fechado" (ngModelChange)="onFechadoChange(fechado)"> Fechado
-        </label>
-      </div>      
+        <table class="table table-bordered table-andamento" *ngIf="ordem.data_hora_fechado">
+          <tr>
+            <th>Fechado</th>
+            <td>{{ stringAsDate(ordem.data_hora_fechado) | date:'dd/MM/yyyy HH:mm:ss' }}</td> 
+            <td><input type="checkbox" [(ngModel)]="fechado" (ngModelChange)="onFechadoChange(fechado)"></td>
+          </tr>
+        </table>
+
+        <div class="checkbox" *ngIf="!ordem.data_hora_fechado">
+          <label>
+            <input type="checkbox" [(ngModel)]="fechado" (ngModelChange)="onFechadoChange(fechado)"> Fechado
+          </label>
+        </div>   
+
+      </div>   
 
       <div *ngIf="fechado">
-        <table class="table table-bordered" *ngIf="ordem.data_hora_entregue">
+        <table class="table table-bordered table-andamento" *ngIf="ordem.data_hora_entregue">
           <tr>
           <th>Entregue</th>
           <td>{{ stringAsDate(ordem.data_hora_entregue) | date:'dd/MM/yyyy HH:mm:ss' }}</td>
@@ -219,9 +234,19 @@
         <textarea ngControl="defeito" class="form-control" id="defeito" [ngModel]="ordem.defeito"></textarea>
       </div>
 
-      <div class="form-group">
-        <label for="solucao">Solução:</label>
-        <textarea ngControl="solucao" class="form-control" id="solucao" [ngModel]="ordem.solucao"></textarea>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="solucao">Solução:</label>
+            <textarea ngControl="solucao" class="form-control" id="solucao" [ngModel]="ordem.solucao" rows="4"></textarea>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="pecas">Peças:</label>
+            <textarea ngControl="pecas" class="form-control" id="pecas" [ngModel]="ordem.pecas" rows="4"></textarea>
+          </div>
+        </div>
       </div>
 
       <div class="row">
@@ -248,6 +273,11 @@
           <div class="form-group">
             <label for="condicao">Condição:</label>
             <input ngControl="condicao" type="text" class="form-control" id="condicao" [(ngModel)]="ordem.condicao"/>
+          </div>
+
+          <div class="form-group" *ngIf="ordem.tecnico">
+            <label for="tecnico">Técnico:</label>
+            <input type="text" class="form-control" id="tecnico" [(ngModel)]="ordem.tecnico" readonly="readonly" />
           </div>
         </div>
       </div>
@@ -321,20 +351,20 @@
         <input ngControl="numero_nfe" type="text" class="form-control" [(ngModel)]="ordem.numero_nfe">
       </div>
 
-    </div>
-    
-    <input type="hidden" class="form-control" [(ngModel)]="numero" ngControl="numero">
-  
-    <div class="row">
-      <div class="col-md-1">
-        <button type="submit" class="btn btn-default">Salvar</button>
+      <div style="text-align:right">
+        <button type="submit" class="btn btn-primary">Salvar</button>
       </div>
-      <div class="col-md-5">
-        <div class="alert alert-success" role="alert" *ngIf="successMessage">
-          {{ successMessage }}
-        </div>
-      </div>
+
     </div>
 
   </div>
+  
+  <input type="hidden" class="form-control" [(ngModel)]="numero" ngControl="numero">
+
+  <div class="row">
+    <div class="alert alert-success" role="alert" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+  </div>
+
 </form>
