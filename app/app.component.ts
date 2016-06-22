@@ -8,6 +8,8 @@ import { HomeComponent } from './home/home.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { AdminComponent } from './admin/admin.component';
 import { OrdensComponent } from './ordens/ordens.component';
+import { CobrancaComponent } from './cobranca/cobranca.component';
+
 import { tokenNotExpired } from 'angular2-jwt';
 
 @Component({
@@ -23,6 +25,7 @@ import { tokenNotExpired } from 'angular2-jwt';
   { path: '/clientes/...', name: 'Clientes', component: ClientesComponent },
   { path: '/admin', name: 'Admin', component: AdminComponent },
   { path: '/ordens/...', name: 'Ordens', component: OrdensComponent },
+  { path: '/cobranca', name: 'Cobranca', component: CobrancaComponent }
 ])
 
 export class AppComponent implements OnInit {

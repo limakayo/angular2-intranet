@@ -26,6 +26,7 @@
           	<li><a [routerLink]="['Ordens', 'Controle']">Controle</a></li>
           </ul>
         </li>
+        <li *ngIf="auth.isAdmin()"><a [routerLink]="['Cobranca']">Cobrança</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <button (click)="auth.login()" *ngIf="!auth.loggedIn()" class="btn btn-default navbar-btn">Login</button>

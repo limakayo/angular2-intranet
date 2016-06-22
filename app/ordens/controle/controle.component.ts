@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouteParams } from '@angular/router-deprecated';
+import { Growl, Message } from 'primeng/primeng';
 
 import { OrdemService } from '../shared/ordem.service';
 import { AcessorioService } from '../../acessorios/acessorio.service';
@@ -22,11 +23,13 @@ import { FORM_DIRECTIVES } from '@angular/common';
 		TransporteService,
 		AuthService
 	],
-	directives: [  Currency, FORM_DIRECTIVES ]
+	directives: [  Currency, FORM_DIRECTIVES, Growl ]
 })
 export class ControleComponent implements OnInit {
 
 	ordem: any;
+
+	msgs: Message[] = [];
 
 	user: any;
 
@@ -85,6 +88,11 @@ export class ControleComponent implements OnInit {
 		  this.getOrdem(numero);
 		}
 	}
+
+	showInfo() {
+        this.msgs = [];
+        this.msgs.push({ severity: 'info', summary: 'Ordem de serviço', detail: 'Atualizada com sucesso' });
+    }
 
 	getUser() {
 		this.authService.getUser().subscribe(
@@ -222,10 +230,7 @@ export class ControleComponent implements OnInit {
 			ordem => {
 				this.ordem = ordem;
 				this.updateMenu();
-				this.successMessage = "Ordem atualizada com sucesso";
-				setTimeout(() => {
-					this.successMessage = null
-				}, 2000);
+				this.showInfo();
 			}
 		)
 	}
